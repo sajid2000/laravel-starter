@@ -2,6 +2,7 @@
 
 namespace Modules\Tag\Providers;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Finder\Finder;
 
@@ -58,8 +59,7 @@ class TagServiceProvider extends ServiceProvider
             module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower.'.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            module_path($this->moduleName, 'Config/config.php'),
-            $this->moduleNameLower
+            module_path($this->moduleName, 'Config/config.php'), $this->moduleNameLower
         );
     }
 
@@ -107,10 +107,22 @@ class TagServiceProvider extends ServiceProvider
         return [];
     }
 
+    private function getPublishableViewPaths(): array
+    {
+        $paths = [];
+        foreach (Config::get('view.paths') as $path) {
+            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
+                $paths[] = $path.'/modules/'.$this->moduleNameLower;
+            }
+        }
+
+        return $paths;
+    }
+
     /**
      * Register commands.
      *
-     * @param string $namespace
+     * @param  string  $namespace
      */
     protected function registerCommands($namespace = '')
     {
@@ -124,17 +136,5 @@ class TagServiceProvider extends ServiceProvider
         }
 
         $this->commands($classes);
-    }
-
-    private function getPublishableViewPaths(): array
-    {
-        $paths = [];
-        foreach (\Config::get('view.paths') as $path) {
-            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
-                $paths[] = $path.'/modules/'.$this->moduleNameLower;
-            }
-        }
-
-        return $paths;
     }
 }

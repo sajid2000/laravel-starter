@@ -1,5 +1,6 @@
-<!doctype html>
-<html lang="{{App::getLocale()}}">
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,61 +25,62 @@
 
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali+UI&display=swap" rel="stylesheet" />
-    <style>body{font-family:Ubuntu,"Noto Sans Bengali UI", Arial, Helvetica, sans-serif}</style>
+    <style>
+        body {
+            font-family: Ubuntu, "Noto Sans Bengali UI", Arial, Helvetica, sans-serif
+        }
+    </style>
 
     @stack('after-styles')
 
     <x-google-analytics />
 
     @livewireStyles
-    
-</head>
-<body class="c-app">
 
+</head>
+
+<body>
     <!-- Sidebar -->
     @include('backend.includes.sidebar')
     <!-- /Sidebar -->
 
-    <div class="c-wrapper">
-
-        <!-- Header Block -->
+    <div class="wrapper d-flex flex-column min-vh-100 bg-light">
+        <!-- Header -->
         @include('backend.includes.header')
-        <!-- / Header Block -->
+        <!-- /Header -->
 
-        <div class="c-body">
-            <main class="c-main">
-                <div class="container-fluid">
+        <div class="body flex-grow-1 px-3">
+            <div class="container-lg">
 
-                    <div class="animated fadeIn">
+                @include('flash::message')
 
-                        @include('flash::message')
+                <!-- Errors block -->
+                @include('backend.includes.errors')
+                <!-- / Errors block -->
 
-                        <!-- Errors block -->
-                        @include('backend.includes.errors')
-                        <!-- / Errors block -->
-
-                        <!-- Main content block -->
-                        @yield('content')
-                        <!-- / Main content block -->
-
-                    </div>
-                </div>
-            </main>
+                <!-- Main content block -->
+                @yield('content')
+                <!-- / Main content block -->
+                
+            </div>
         </div>
 
         <!-- Footer block -->
         @include('backend.includes.footer')
         <!-- / Footer block -->
 
-        <!-- Scripts -->
-        @stack('before-scripts')
+    </div>
 
-        <script src="{{ mix('js/backend.js') }}"></script>
+    <!-- Scripts -->
+    @stack('before-scripts')
 
-        @livewireScripts
+    <script src="{{ mix('js/backend.js') }}"></script>
 
-        @stack('after-scripts')
-        <!-- / Scripts -->
+    @livewireScripts
 
-    </body>
-    </html>
+    @stack('after-scripts')
+    <!-- / Scripts -->
+
+</body>
+
+</html>

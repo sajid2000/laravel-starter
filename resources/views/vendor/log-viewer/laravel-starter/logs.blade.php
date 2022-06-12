@@ -29,7 +29,7 @@ $module_icon = "c-icon cil-list-rich";
             </div>
 
             <div class="col-4">
-                <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
+                <div class="btn-toolbar float-end" role="toolbar" aria-label="Toolbar with button groups">
                     <x-buttons.return-back />
                 </div>
             </div>
@@ -52,7 +52,7 @@ $module_icon = "c-icon cil-list-rich";
                                     @endif
                                 </th>
                                 @endforeach
-                                <th scope="col" class="text-right">Actions</th>
+                                <th scope="col" class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,7 +75,7 @@ $module_icon = "c-icon cil-list-rich";
                                             @endif
                                         </td>
                                     @endforeach
-                                    <td class="text-right">
+                                    <td class="text-end">
                                         <a href="{{ route('log-viewer::logs.show', [$date]) }}" class="btn btn-sm btn-info">
                                             <i class="fas fa-search"></i>
                                         </a>
@@ -109,7 +109,7 @@ $module_icon = "c-icon cil-list-rich";
                 </div>
             </div>
             <div class="col-5">
-                <div class="float-right">
+                <div class="float-end">
                     {!! $rows->render() !!}
                 </div>
             </div>
@@ -158,7 +158,7 @@ $module_icon = "c-icon cil-list-rich";
                 var date = $(this).data('log-date');
                 deleteLogForm.find('input[name=date]').val(date);
                 deleteLogModal.find('.modal-body p').html(
-                    'Are you sure you want to <span class="badge badge-danger">DELETE</span> this log file <span class="badge badge-primary">' + date + '</span> ?'
+                    'Are you sure you want to <span class="badge bg-danger">DELETE</span> this log file <span class="badge badge-primary">' + date + '</span> ?'
                 );
 
                 deleteLogModal.modal('show');

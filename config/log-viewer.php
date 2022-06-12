@@ -56,7 +56,7 @@ return [
         ],
         // 'attributes' => [
         //     'prefix'     => 'log-viewer',
-        //
+
         //     'middleware' => env('ARCANEDEV_LOGVIEWER_MIDDLEWARE') ? explode(',', env('ARCANEDEV_LOGVIEWER_MIDDLEWARE')) : null,
         // ],
     ],
@@ -96,7 +96,7 @@ return [
      | -----------------------------------------------------------------
      */
 
-    'icons' => [
+    'icons' =>  [
         /**
          * Font awesome >= 4.3
          * http://fontawesome.io/icons/.
@@ -117,7 +117,7 @@ return [
      | -----------------------------------------------------------------
      */
 
-    'colors' => [
+    'colors' =>  [
         'levels'    => [
             'empty'     => '#D1D1D1',
             'all'       => '#8A8A8A',

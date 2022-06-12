@@ -22,10 +22,14 @@ return [
     //********* Default configuration for DefaultConfigRepository **************
 
     /**
+     * LFM Route prefix
+     * !!! WARNING - if you change it, you should compile frontend with new prefix(baseUrl) !!!
+     */
+    'routePrefix' => 'file-manager',
+
+    /**
      * List of disk names that you want to use
      * (from config/filesystems).
-     *
-     * images filesystem
      */
     'diskList' => ['files', 'public'],
 
@@ -122,7 +126,7 @@ return [
      *
      * whitelist - Deny anything(access - 0 - deny), that not allowed by the ACL rules list
      */
-    'aclStrategy' => 'whitelist',
+    'aclStrategy' => 'blacklist',
 
     /**
      * ACL Rules cache.

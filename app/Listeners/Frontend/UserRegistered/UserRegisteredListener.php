@@ -6,7 +6,7 @@ use App\Events\Frontend\UserRegistered;
 use App\Notifications\NewRegistration;
 use App\Notifications\NewRegistrationFromSocial;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class UserRegisteredListener implements ShouldQueue
 {
@@ -23,8 +23,7 @@ class UserRegisteredListener implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param UserRegistered $event
-     *
+     * @param  UserRegistered  $event
      * @return void
      */
     public function handle(UserRegistered $event)

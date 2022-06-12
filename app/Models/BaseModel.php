@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Models\Traits\HasHashedMediaTrait;
-use Auth;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -92,19 +92,19 @@ class BaseModel extends Model implements HasMedia
     {
         switch ($this->status) {
             case '0':
-                return '<span class="badge badge-danger">Inactive</span>';
+                return '<span class="badge bg-danger">Inactive</span>';
                 break;
 
             case '1':
-                return '<span class="badge badge-success">Active</span>';
+                return '<span class="badge bg-success">Active</span>';
                 break;
 
             case '2':
-                return '<span class="badge badge-warning">Pending</span>';
+                return '<span class="badge bg-warning text-dark">Pending</span>';
                 break;
 
             default:
-                return '<span class="badge badge-primary">Status:'.$this->status.'</span>';
+                return '<span class="badge bg-primary">Status:'.$this->status.'</span>';
                 break;
         }
     }

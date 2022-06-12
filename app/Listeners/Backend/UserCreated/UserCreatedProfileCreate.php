@@ -5,7 +5,7 @@ namespace App\Listeners\Backend\UserCreated;
 use App\Events\Backend\UserCreated;
 use App\Models\Userprofile;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class UserCreatedProfileCreate implements ShouldQueue
 {
@@ -22,8 +22,7 @@ class UserCreatedProfileCreate implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param UserCreated $event
-     *
+     * @param  UserCreated  $event
      * @return void
      */
     public function handle(UserCreated $event)

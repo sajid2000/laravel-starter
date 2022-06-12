@@ -50,23 +50,23 @@ trait PostPresenter
     {
         switch ($this->status) {
             case '0':
-                return '<span class="badge badge-danger">Unpublished</span>';
+                return '<span class="badge bg-danger">Unpublished</span>';
                 break;
 
             case '1':
                 if ($this->published_at >= Carbon::now()) {
-                    return '<span class="badge badge-warning">Scheduled ('.$this->published_at_formatted.')</span>';
+                    return '<span class="badge bg-warning text-dark">Scheduled ('.$this->published_at_formatted.')</span>';
                 }
 
-                return '<span class="badge badge-success">Pubished</span>';
+                return '<span class="badge bg-success">Pubished</span>';
                 break;
 
             case '2':
-                return '<span class="badge badge-info">Draft</span>';
+                return '<span class="badge bg-info">Draft</span>';
                 break;
 
             default:
-                return '<span class="badge badge-primary">Status:'.$this->status.'</span>';
+                return '<span class="badge bg-primary">Status:'.$this->status.'</span>';
                 break;
         }
     }

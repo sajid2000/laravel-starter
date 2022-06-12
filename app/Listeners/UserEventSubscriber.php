@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use Carbon\Carbon;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class UserEventSubscriber
 {
@@ -43,7 +43,7 @@ class UserEventSubscriber
     /**
      * Register the listeners for the subscriber.
      *
-     * @param \Illuminate\Events\Dispatcher $events
+     * @param  \Illuminate\Events\Dispatcher  $events
      */
     public function subscribe($events)
     {

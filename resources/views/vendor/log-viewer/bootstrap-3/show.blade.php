@@ -1,8 +1,8 @@
 <?php
 /**
- * @var  Arcanedev\LogViewer\Entities\Log            $log
- * @var  Illuminate\Pagination\LengthAwarePaginator  $entries
- * @var  string|null                                 $query
+ * @var  Arcanedev\LogViewer\Entities\Log                                                                     $log
+ * @var  Illuminate\Pagination\LengthAwarePaginator|array<string|int, Arcanedev\LogViewer\Entities\LogEntry>  $entries
+ * @var  string|null                                                                                          $query
  */
 ?>
 
@@ -125,12 +125,11 @@
                                 <th style="width: 120px;">@lang('Level')</th>
                                 <th style="width: 65px;">@lang('Time')</th>
                                 <th>@lang('Header')</th>
-                                <th class="text-right">@lang('Actions')</th>
+                                <th class="text-end">@lang('Actions')</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($entries as $key => $entry)
-                                <?php /** @var  Arcanedev\LogViewer\Entities\LogEntry  $entry */ ?>
                                 <tr>
                                     <td>
                                         <span class="label label-env">{{ $entry->env }}</span>
@@ -146,7 +145,7 @@
                                     <td>
                                         <p>{{ $entry->header }}</p>
                                     </td>
-                                    <td class="text-right">
+                                    <td class="text-end">
                                         @if ($entry->hasStack())
                                         <a class="btn btn-xs btn-default" role="button" data-toggle="collapse"
                                            href="#log-stack-{{ $key }}" aria-expanded="false" aria-controls="log-stack-{{ $key }}">

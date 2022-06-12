@@ -36,19 +36,19 @@ trait CommentPresenter
     {
         switch ($this->status) {
             case '0':
-                return '<span class="badge badge-warning">Pending</span>';
+                return '<span class="badge bg-warning text-dark">Pending</span>';
                 break;
 
             case '1':
-                return '<span class="badge badge-success">Pubished</span>';
+                return '<span class="badge bg-success">Pubished</span>';
                 break;
 
             case '2':
-                return '<span class="badge badge-danger">Rejected</span>';
+                return '<span class="badge bg-danger">Rejected</span>';
                 break;
 
             default:
-                return '<span class="badge badge-primary">Status:'.$this->status.'</span>';
+                return '<span class="badge bg-primary">Status:'.$this->status.'</span>';
                 break;
         }
     }

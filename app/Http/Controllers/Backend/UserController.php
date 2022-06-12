@@ -190,8 +190,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -270,8 +269,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function show($id)
@@ -299,8 +297,7 @@ class UserController extends Controller
     /**
      * Display Profile Details of Logged in user.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function profile(Request $request, $id)
@@ -330,8 +327,7 @@ class UserController extends Controller
     /**
      * Show the form for Profile Paeg Editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function profileEdit($id)
@@ -345,7 +341,7 @@ class UserController extends Controller
 
         $module_action = 'Edit Profile';
 
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             $id = auth()->user()->id;
         }
 
@@ -363,9 +359,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function profileUpdate(Request $request, $id)
@@ -386,7 +381,7 @@ class UserController extends Controller
             'email'     => 'email',
         ]);
 
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             $id = auth()->user()->id;
         }
 
@@ -424,13 +419,12 @@ class UserController extends Controller
     /**
      * Show the form for Profile Paeg Editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function changeProfilePassword($id)
     {
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             $id = auth()->user()->id;
         }
 
@@ -449,9 +443,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function changeProfilePasswordUpdate(Request $request, $id)
@@ -467,7 +460,7 @@ class UserController extends Controller
         $module_model = $this->module_model;
         $module_name_singular = Str::singular($module_name);
 
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             $id = auth()->user()->id;
         }
 
@@ -486,8 +479,7 @@ class UserController extends Controller
     /**
      * Show the form for Profile Paeg Editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function changePassword($id)
@@ -504,7 +496,7 @@ class UserController extends Controller
         $page_heading = label_case($module_title);
         $title = $page_heading.' '.label_case($module_action);
 
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             $id = auth()->user()->id;
         }
 
@@ -519,9 +511,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function changePasswordUpdate(Request $request, $id)
@@ -537,7 +528,7 @@ class UserController extends Controller
         $module_model = $this->module_model;
         $module_name_singular = Str::singular($module_name);
 
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             $id = auth()->user()->id;
         }
 
@@ -556,13 +547,12 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function edit($id)
     {
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             abort(404);
         }
 
@@ -594,14 +584,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        if (!auth()->user()->can('edit_users')) {
+        if (! auth()->user()->can('edit_users')) {
             abort(404);
         }
 
@@ -665,8 +654,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
+     * @param  int  $id
      * @return Response
      */
     public function destroy($id)
@@ -716,7 +704,7 @@ class UserController extends Controller
         $module_model = $this->module_model;
         $module_name_singular = Str::singular($module_name);
 
-        $module_action = 'List';
+        $module_action = 'Deleted List';
         $page_heading = $module_title;
 
         $$module_name = $module_model::onlyTrashed()->orderBy('deleted_at', 'desc')->paginate();
@@ -732,9 +720,8 @@ class UserController extends Controller
     /**
      * Restore a soft deleted entry.
      *
-     * @param Request $request
-     * @param int     $id
-     *
+     * @param  Request  $request
+     * @param  int  $id
      * @return Response
      */
     public function restore($id)
@@ -763,8 +750,7 @@ class UserController extends Controller
     /**
      * Block Any Specific User.
      *
-     * @param int $id User Id
-     *
+     * @param  int  $id  User Id
      * @return Back To Previous Page
      */
     public function block($id)
@@ -806,8 +792,7 @@ class UserController extends Controller
     /**
      * Unblock Any Specific User.
      *
-     * @param int $id User Id
-     *
+     * @param  int  $id  User Id
      * @return Back To Previous Page
      */
     public function unblock($id)
@@ -868,7 +853,7 @@ class UserController extends Controller
         $user_provider_id = $request->user_provider_id;
         $user_id = $request->user_id;
 
-        if (!$user_provider_id > 0 || !$user_id > 0) {
+        if (! $user_provider_id > 0 || ! $user_id > 0) {
             flash('Invalid Request. Please try again.')->error();
 
             return redirect()->back();
@@ -895,7 +880,6 @@ class UserController extends Controller
      * Resend Email Confirmation Code to User.
      *
      * @param [type] $hashid [description]
-     *
      * @return [type] [description]
      */
     public function emailConfirmationResend($id)

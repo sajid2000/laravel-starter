@@ -9,9 +9,8 @@ class GenerateMenus
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure                 $next
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -25,9 +24,9 @@ class GenerateMenus
         \Menu::make('admin_sidebar', function ($menu) {
 
             // comments
-            $menu->add('<i class="fas fa-comments c-sidebar-nav-icon"></i> Comments', [
+            $menu->add('<i class="nav-icon fas fa-comments"></i> Comments', [
                 'route' => 'backend.comments.index',
-                'class' => 'c-sidebar-nav-item',
+                'class' => 'nav-item',
             ])
             ->data([
                 'order'         => 85,
@@ -35,7 +34,7 @@ class GenerateMenus
                 'permission'    => ['view_comments'],
             ])
             ->link->attr([
-                'class' => 'c-sidebar-nav-link',
+                'class' => 'nav-link',
             ]);
         })->sortBy('order');
 
