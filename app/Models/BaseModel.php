@@ -4,10 +4,10 @@ namespace App\Models;
 
 use App\Models\Traits\HasHashedMediaTrait;
 use Carbon\Carbon;
-use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -23,9 +23,9 @@ class BaseModel extends Model implements HasMedia
         '_method',
     ];
 
-    protected $dates = [
-        'deleted_at',
-        'published_at',
+    protected $casts = [
+        'deleted_at' => 'datetime',
+        'published_at' => 'datetime',
     ];
 
     protected static function boot()
@@ -61,14 +61,14 @@ class BaseModel extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-              ->width(250)
-              ->height(250)
-              ->quality(70);
+            ->width(250)
+            ->height(250)
+            ->quality(70);
 
         $this->addMediaConversion('thumb300')
-              ->width(300)
-              ->height(300)
-              ->quality(70);
+            ->width(300)
+            ->height(300)
+            ->quality(70);
     }
 
     /**
@@ -78,9 +78,10 @@ class BaseModel extends Model implements HasMedia
      */
     public function getTableColumns()
     {
-        $table_info_columns = DB::select(DB::raw('SHOW COLUMNS FROM '.$this->getTable()));
+        $table_name = DB::getTablePrefix().$this->getTable();
+        $columns = DB::select('SHOW COLUMNS FROM '.$table_name);
 
-        return $table_info_columns;
+        return $columns;
     }
 
     /**

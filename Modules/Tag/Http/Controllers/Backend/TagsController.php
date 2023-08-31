@@ -26,13 +26,12 @@ class TagsController extends BackendBaseController
         $this->module_icon = 'fas fa-tags';
 
         // module model name, path
-        $this->module_model = "Modules\Tag\Entities\Tag";
+        $this->module_model = "Modules\Tag\Models\Tag";
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      * @return Response
      */
     public function store(Request $request)
@@ -98,7 +97,6 @@ class TagsController extends BackendBaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
      * @param  int  $id
      * @return Response
      */

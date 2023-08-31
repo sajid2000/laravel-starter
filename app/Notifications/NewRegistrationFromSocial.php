@@ -61,10 +61,10 @@ class NewRegistrationFromSocial extends Notification
         }
 
         return (new MailMessage())
-                    ->subject('Thank you for registration!')
-                    ->line('Thank you for registration at '.app_name().'.')
-                    ->action('Vist Application', url('/'))
-                    ->line('We are really happy that you started to use '.app_name().'!');
+            ->subject('Thank you for registration!')
+            ->line('Thank you for registration at '.app_name().'.')
+            ->action('Vist Application', url('/'))
+            ->line('We are really happy that you started to use '.app_name().'!');
     }
 
     /**
@@ -83,13 +83,13 @@ class NewRegistrationFromSocial extends Notification
         $url_frontend = route('frontend.users.profile', $user->id);
 
         return [
-            'title'         => 'Registration Completed!',
-            'module'        => 'User',
-            'type'          => 'created', // created, published, viewed,
-            'icon'          => 'fas fa-user',
-            'text'          => $text,
-            'url_backend'   => $url_backend,
-            'url_frontend'  => $url_frontend,
+            'title' => 'Registration Completed!',
+            'module' => 'User',
+            'type' => 'created', // created, published, viewed,
+            'icon' => 'fas fa-user',
+            'text' => $text,
+            'url_backend' => $url_backend,
+            'url_frontend' => $url_frontend,
         ];
     }
 
@@ -105,7 +105,7 @@ class NewRegistrationFromSocial extends Notification
             'verification.verify',
             Carbon::now()->addMinutes(Config::get('auth.verification.expire', 60)),
             [
-                'id'   => $notifiable->getKey(),
+                'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),
             ]
         );

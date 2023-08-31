@@ -8,6 +8,16 @@ use Modules\Article\Events\PostViewed;
 
 class PostsController extends Controller
 {
+    public $module_title;
+
+    public $module_name;
+
+    public $module_path;
+
+    public $module_icon;
+
+    public $module_model;
+
     public function __construct()
     {
         // Page Title
@@ -23,7 +33,7 @@ class PostsController extends Controller
         $this->module_icon = 'fas fa-file-alt';
 
         // module model name, path
-        $this->module_model = "Modules\Article\Entities\Post";
+        $this->module_model = "Modules\Article\Models\Post";
     }
 
     /**

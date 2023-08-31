@@ -79,12 +79,13 @@
             <div class="input-group mb-3">
                 {{ html()->text($field_name)->placeholder($field_placeholder)->class('form-control')->attributes(["$required", 'aria-label'=>'Image', 'aria-describedby'=>'button-image']) }}
                 <div class="input-group-append">
-                    <button class="btn btn-info" type="button" id="button-image"><i class="fas fa-folder-open"></i> @lang('Browse')</button>
+                    <button class="btn btn-info" type="button" id="button-image" data-input="{{$field_name}}"><i class="fas fa-folder-open"></i> @lang('Browse')</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div class="row mb-3">
     <div class="col-4">
         <div class="form-group">
@@ -99,7 +100,7 @@
             {{ html()->select($field_name, isset($$module_name_singular)?optional($$module_name_singular->$field_relation)->pluck('name', 'id'):'')->placeholder($field_placeholder)->class('form-control select2-category')->attributes(["$required"]) }}
         </div>
     </div>
-    <div class="col-4">
+    <div class=" col-4">
         <div class="form-group">
             <?php
             $field_name = 'type';
@@ -113,7 +114,7 @@
             ];
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
-            {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-control select2')->attributes(["$required"]) }}
+            {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-select')->attributes(["$required"]) }}
         </div>
     </div>
     <div class="col-4">
@@ -129,7 +130,7 @@
             ];
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
-            {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-control select2')->attributes(["$required"]) }}
+            {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-select')->attributes(["$required"]) }}
         </div>
     </div>
 </div>
@@ -166,7 +167,7 @@
             ];
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
-            {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-control select2')->attributes(["$required"]) }}
+            {{ html()->select($field_name, $select_options)->placeholder($field_placeholder)->class('form-select')->attributes(["$required"]) }}
         </div>
     </div>
     <div class="col-6">
@@ -175,20 +176,10 @@
             $field_name = 'published_at';
             $field_lable = __("article::$module_name.$field_name");
             $field_placeholder = $field_lable;
-            $required = "";
+            $required = "required";
             ?>
             {{ html()->label($field_lable, $field_name) }} {!! fielf_required($required) !!}
-            <div class="input-group date datetime" id="{{$field_name}}" data-target-input="nearest">
-                {{ html()->text($field_name)->placeholder($field_placeholder)->class('form-control datetimepicker-input')->attributes(["$required", 'data-target'=>"#$field_name"]) }}
-                <div class="input-group-append" data-target="#{{$field_name}}" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="fas fa-calendar-alt"></i></div>
-                </div>
-            </div>
-            <!-- <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
-            </div> -->
-
+            {{ html()->datetime($field_name)->placeholder($field_placeholder)->class('form-control')->attributes(["$required"]) }}
         </div>
     </div>
 </div>
@@ -270,20 +261,82 @@
         </div>
     </div>
 </div>
-<div></div>
-
 
 <!-- Select2 Library -->
 <x-library.select2 />
-<x-library.datetime-picker />
 
 @push('after-styles')
 <!-- File Manager -->
 <link rel="stylesheet" href="{{ asset('vendor/file-manager/css/file-manager.css') }}">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css" rel="stylesheet">
+<style>
+    .note-editor.note-frame :after {
+        display: none;
+    }
+
+    .note-editor .note-toolbar .note-dropdown-menu,
+    .note-popover .popover-content .note-dropdown-menu {
+        min-width: 180px;
+    }
+</style>
 @endpush
 
 @push ('after-scripts')
-<script type="text/javascript">
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js"></script>
+<script type="module">
+    // Define function to open filemanager window
+    var lfm = function(options, cb) {
+        var route_prefix = (options && options.prefix) ? options.prefix : '/laravel-filemanager';
+        window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
+        window.SetUrl = cb;
+    };
+
+    // Define LFM summernote button
+    var LFMButton = function(context) {
+        var ui = $.summernote.ui;
+        var button = ui.button({
+            contents: '<i class="note-icon-picture"></i> ',
+            tooltip: 'Insert image with filemanager',
+            click: function() {
+
+                lfm({
+                    type: 'image',
+                    prefix: '/laravel-filemanager'
+                }, function(lfmItems, path) {
+                    lfmItems.forEach(function(lfmItem) {
+                        context.invoke('insertImage', lfmItem.url);
+                    });
+                });
+
+            }
+        });
+        return button.render();
+    };
+
+    $('#content').summernote({
+        height: 120,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['fontname', 'fontsize', 'bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'lfm', 'video']],
+            ['view', ['codeview', 'undo', 'redo', 'help']],
+        ],
+        buttons: {
+            lfm: LFMButton
+        }
+    });
+</script>
+
+<script type="module" src="{{ asset('vendor/laravel-filemanager/js/stand-alone-button.js') }}"></script>
+<script type="module">
+    $('#button-image').filemanager('image');
+</script>
+
+<script type="module">
     $(document).ready(function() {
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();
@@ -291,7 +344,7 @@
         });
 
         $('.select2-category').select2({
-            theme: "bootstrap",
+            theme: "bootstrap4",
             placeholder: '@lang("Select an option")',
             minimumInputLength: 2,
             allowClear: true,
@@ -313,7 +366,7 @@
         });
 
         $('.select2-tags').select2({
-            theme: "bootstrap",
+            // theme: "bootstrap4",
             placeholder: '@lang("Select an option")',
             minimumInputLength: 2,
             allowClear: true,
@@ -334,50 +387,5 @@
             }
         });
     });
-</script>
-
-<!-- Date Time Picker & Moment Js-->
-<script type="text/javascript">
-    $(function() {
-        $('.datetime').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss',
-            icons: {
-                time: 'far fa-clock',
-                date: 'far fa-calendar-alt',
-                up: 'fas fa-arrow-up',
-                down: 'fas fa-arrow-down',
-                previous: 'fas fa-chevron-left',
-                next: 'fas fa-chevron-right',
-                today: 'far fa-calendar-check',
-                clear: 'far fa-trash-alt',
-                close: 'fas fa-times'
-            }
-        });
-    });
-</script>
-
-<script type="text/javascript" src="{{ asset('vendor/ckeditor/ckeditor.js') }}"></script>
-<script type="text/javascript" src="{{ asset('vendor/file-manager/js/file-manager.js') }}"></script>
-
-<script type="text/javascript">
-    CKEDITOR.replace('content', {
-        filebrowserImageBrowseUrl: '/file-manager/ckeditor',
-        language: '{{App::getLocale()}}',
-        defaultLanguage: 'en'
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-
-        document.getElementById('button-image').addEventListener('click', (event) => {
-            event.preventDefault();
-
-            window.open('/file-manager/fm-button', 'fm', 'width=800,height=600');
-        });
-    });
-
-    // set file link
-    function fmSetLink($url) {
-        document.getElementById('featured_image').value = $url;
-    }
 </script>
 @endpush

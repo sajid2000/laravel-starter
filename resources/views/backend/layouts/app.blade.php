@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ language_direction() }}">
 
 <head>
     <meta charset="utf-8">
@@ -19,9 +19,9 @@
 
     <title>@yield('title') | {{ config('app.name') }}</title>
 
-    @stack('before-styles')
+    <script src="{{ asset('vendor/jquery/jquery-3.6.4.min.js') }}"></script>
 
-    <link rel="stylesheet" href="{{ mix('css/backend.css') }}">
+    @vite(['resources/sass/app-backend.scss', 'resources/js/app-backend.js'])
 
     <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+Bengali+UI&display=swap" rel="stylesheet" />
@@ -49,7 +49,7 @@
         @include('backend.includes.header')
         <!-- /Header -->
 
-        <div class="body flex-grow-1 px-3">
+        <div class="body flex-grow-1">
             <div class="container-lg">
 
                 @include('flash::message')
@@ -61,7 +61,7 @@
                 <!-- Main content block -->
                 @yield('content')
                 <!-- / Main content block -->
-                
+
             </div>
         </div>
 
@@ -72,12 +72,8 @@
     </div>
 
     <!-- Scripts -->
-    @stack('before-scripts')
-
-    <script src="{{ mix('js/backend.js') }}"></script>
-
     @livewireScripts
-
+    
     @stack('after-scripts')
     <!-- / Scripts -->
 

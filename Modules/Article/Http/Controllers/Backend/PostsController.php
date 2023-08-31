@@ -9,18 +9,27 @@ use Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Modules\Article\Entities\Category;
 use Modules\Article\Events\PostCreated;
 use Modules\Article\Events\PostUpdated;
 use Modules\Article\Http\Requests\Backend\PostsRequest;
+use Modules\Category\Models\Category;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\DataTables\DataTables;
 
 class PostsController extends Controller
 {
     use Authorizable;
+
+    public $module_title;
+
+    public $module_name;
+
+    public $module_path;
+
+    public $module_icon;
+
+    public $module_model;
 
     public function __construct()
     {
@@ -37,7 +46,7 @@ class PostsController extends Controller
         $this->module_icon = 'fas fa-file-alt';
 
         // module model name, path
-        $this->module_model = "Modules\Article\Entities\Post";
+        $this->module_model = "Modules\Article\Models\Post";
     }
 
     /**
@@ -82,30 +91,30 @@ class PostsController extends Controller
         $data = $$module_name;
 
         return Datatables::of($$module_name)
-                        ->addColumn('action', function ($data) {
-                            $module_name = $this->module_name;
+            ->addColumn('action', function ($data) {
+                $module_name = $this->module_name;
 
-                            return view('backend.includes.action_column', compact('module_name', 'data'));
-                        })
-                        ->editColumn('name', function ($data) {
-                            $is_featured = ($data->is_featured) ? '<span class="badge bg-primary">Featured</span>' : '';
+                return view('backend.includes.action_column', compact('module_name', 'data'));
+            })
+            ->editColumn('name', function ($data) {
+                $is_featured = ($data->is_featured) ? '<span class="badge bg-primary">Featured</span>' : '';
 
-                            return $data->name.' '.$data->status_formatted.' '.$is_featured;
-                        })
-                        ->editColumn('updated_at', function ($data) {
-                            $module_name = $this->module_name;
+                return $data->name.' '.$data->status_formatted.' '.$is_featured;
+            })
+            ->editColumn('updated_at', function ($data) {
+                $module_name = $this->module_name;
 
-                            $diff = Carbon::now()->diffInHours($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
-                            if ($diff < 25) {
-                                return $data->updated_at->diffForHumans();
-                            } else {
-                                return $data->updated_at->isoFormat('LLLL');
-                            }
-                        })
-                        ->rawColumns(['name', 'status', 'action'])
-                        ->orderColumns(['id'], '-:column $1')
-                        ->make(true);
+                if ($diff < 25) {
+                    return $data->updated_at->diffForHumans();
+                } else {
+                    return $data->updated_at->isoFormat('LLLL');
+                }
+            })
+            ->rawColumns(['name', 'status', 'action'])
+            ->orderColumns(['id'], '-:column $1')
+            ->make(true);
     }
 
     /**
@@ -136,7 +145,7 @@ class PostsController extends Controller
 
         foreach ($query_data as $row) {
             $$module_name[] = [
-                'id'   => $row->id,
+                'id' => $row->id,
                 'text' => $row->name,
             ];
         }
@@ -222,10 +231,10 @@ class PostsController extends Controller
         $$module_name_singular = $module_model::findOrFail($id);
 
         $activities = Activity::where('subject_type', '=', $module_model)
-                                ->where('log_name', '=', $module_name)
-                                ->where('subject_id', '=', $id)
-                                ->latest()
-                                ->paginate();
+            ->where('log_name', '=', $module_name)
+            ->where('subject_id', '=', $id)
+            ->latest()
+            ->paginate();
 
         Log::info(label_case($module_title.' '.$module_action).' | User:'.Auth::user()->name.'(ID:'.Auth::user()->id.')');
 

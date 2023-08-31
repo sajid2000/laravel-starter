@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
-use Modules\Comment\Entities\Comment;
+use Modules\Comment\Models\Comment;
 
 class NewCommentAdded extends Notification implements ShouldQueue
 {
@@ -48,9 +48,9 @@ class NewCommentAdded extends Notification implements ShouldQueue
         $user = $notifiable;
 
         return (new MailMessage())
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', 'https://laravel.com')
-                    ->line('Thank you for using our application!');
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', 'https://laravel.com')
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -65,18 +65,18 @@ class NewCommentAdded extends Notification implements ShouldQueue
         $user = $notifiable;
 
         return (new SlackMessage())
-                ->success()
-                ->from('BlueCube', ':incoming_envelope:')
-                ->content('New Comment: '.$comment->name.' | From:'.$comment->user_name)
-                ->attachment(function ($attachment) use ($comment) {
-                    $attachment->title('Comment '.$comment->id, route('backend.comments.show', $comment->id))
+            ->success()
+            ->from('BlueCube', ':incoming_envelope:')
+            ->content('New Comment: '.$comment->name.' | From:'.$comment->user_name)
+            ->attachment(function ($attachment) use ($comment) {
+                $attachment->title('Comment '.$comment->id, route('backend.comments.show', $comment->id))
                     ->fields([
-                        'Post'    => $comment->post_name,
-                        'User'    => $comment->user_name,
+                        'Post' => $comment->post_name,
+                        'User' => $comment->user_name,
                         'Comment' => $comment->name,
-                        'Status'  => $comment->status_label_text,
+                        'Status' => $comment->status_label_text,
                     ]);
-                });
+            });
     }
 
     /**
@@ -95,13 +95,13 @@ class NewCommentAdded extends Notification implements ShouldQueue
         $url_backend = route('backend.comments.show', $comment->id);
 
         return [
-            'title'         => 'New Comment for review!',
-            'module'        => 'Comment',
-            'type'          => 'created', // created, published, viewed,
-            'icon'          => 'fas fa-comments',
-            'text'          => $text,
-            'url_backend'   => $url_backend,
-            'url_frontend'  => '',
+            'title' => 'New Comment for review!',
+            'module' => 'Comment',
+            'type' => 'created', // created, published, viewed,
+            'icon' => 'fas fa-comments',
+            'text' => $text,
+            'url_backend' => $url_backend,
+            'url_frontend' => '',
         ];
     }
 }

@@ -61,10 +61,13 @@ class SocialLoginController extends Controller
     }
 
     /**
-     * Return user if exists; create and return if doesn't.
+     * Finds or creates a user based on the given social user and provider.
      *
-     * @param $githubUser
-     * @return User
+     * @param  mixed  $socialUser  The social user object.
+     * @param  string  $provider  The provider name.
+     * @return \App\Models\User The found or created user.
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException If the user is not found.
      */
     private function findOrCreateUser($socialUser, $provider)
     {
@@ -74,10 +77,10 @@ class SocialLoginController extends Controller
             return $authUser;
         } elseif ($authUser = User::where('email', $socialUser->getEmail())->first()) {
             UserProvider::create([
-                'user_id'     => $authUser->id,
+                'user_id' => $authUser->id,
                 'provider_id' => $socialUser->getId(),
-                'avatar'      => $socialUser->getAvatar(),
-                'provider'    => $provider,
+                'avatar' => $socialUser->getAvatar(),
+                'provider' => $provider,
             ]);
 
             return $authUser;
@@ -98,10 +101,10 @@ class SocialLoginController extends Controller
             }
 
             $user = User::create([
-                'first_name'  => $first_name,
-                'last_name'   => $last_name,
-                'name'        => $name,
-                'email'       => $email,
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'name' => $name,
+                'email' => $email,
             ]);
 
             $media = $user->addMediaFromUrl($socialUser->getAvatar())->toMediaCollection('users');
@@ -111,10 +114,10 @@ class SocialLoginController extends Controller
             event(new UserRegistered($user));
 
             UserProvider::create([
-                'user_id'     => $user->id,
+                'user_id' => $user->id,
                 'provider_id' => $socialUser->getId(),
-                'avatar'      => $socialUser->getAvatar(),
-                'provider'    => $provider,
+                'avatar' => $socialUser->getAvatar(),
+                'provider' => $provider,
             ]);
 
             return $user;

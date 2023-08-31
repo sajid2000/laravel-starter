@@ -1,7 +1,7 @@
 @extends ('backend.layouts.app')
 
 <?php
-$module_icon = "c-icon cil-list-rich";
+$module_icon = "fa-solid fa-list-check";
 ?>
 
 @section('title') {{ __('Log Viewer Dashboard') }} @endsection
@@ -30,7 +30,7 @@ $module_icon = "c-icon cil-list-rich";
 
             <div class="col-4">
                 <div class="btn-toolbar float-end" role="toolbar" aria-label="Toolbar with button groups">
-                    <x-buttons.return-back />
+                    <x-backend.buttons.return-back />
                     <a class="btn btn-primary ms-1" href="{{ route('log-viewer::logs.list') }}" type="button">
                         <i class="fas fa-list-ol"></i> @lang('Logs by Date')
                     </a>
@@ -84,8 +84,8 @@ $module_icon = "c-icon cil-list-rich";
 @endpush
 
 @push('after-scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
-<script>
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script type="module">
     $(function() {
         new Chart(document.getElementById("stats-doughnut-chart"), {
             type: 'doughnut',

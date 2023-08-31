@@ -15,6 +15,16 @@ class RolesController extends Controller
 {
     use Authorizable;
 
+    public $module_title;
+
+    public $module_name;
+
+    public $module_path;
+
+    public $module_icon;
+
+    public $module_model;
+
     public function __construct()
     {
         // Page Title
@@ -27,7 +37,7 @@ class RolesController extends Controller
         $this->module_path = 'roles';
 
         // module icon
-        $this->module_icon = 'c-icon cil-people';
+        $this->module_icon = 'fa-solid fa-user-shield';
 
         // module model name, path
         $this->module_model = "App\Models\Role";
@@ -86,7 +96,6 @@ class RolesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -173,7 +182,6 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -191,7 +199,7 @@ class RolesController extends Controller
         $$module_name_singular = $module_model::findOrFail($id);
 
         $this->validate($request, [
-            'name'        => 'required|max:20|unique:roles,name,'.$id,
+            'name' => 'required|max:20|unique:roles,name,'.$id,
             'permissions' => 'required',
         ]);
 

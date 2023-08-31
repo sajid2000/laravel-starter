@@ -44,6 +44,14 @@ return [
             'throw' => false,
         ],
 
+        'public-file-manager' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public'),
+            'url' => '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -56,28 +64,13 @@ return [
             'throw' => false,
         ],
 
-        'images' => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/public/images'),
-            'url'        => env('APP_URL').'/storage/images',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
-
-        'files' => [
-            'driver'     => 'local',
-            'root'       => storage_path('app/public/files'),
-            'url'        => env('APP_URL').'/storage/files',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
-
         'media' => [
             'driver' => 'local',
-            'root'   => public_path('media'),
-            'url'    => env('APP_URL').'/media',
+            'root' => storage_path('app/public/media'),
+            'url' => '/storage/media',
+            'visibility' => 'public',
+            'throw' => false,
         ],
-
     ],
 
     /*

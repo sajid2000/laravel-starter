@@ -1,9 +1,11 @@
-<footer class="footer text-sm">
+<footer class="footer text-muted mt-4">
     <div>
-        <a href="/">{{app_name()}}</a>.
-        @if(setting('show_copyright'))
-        @lang('Copyright') &copy; {{ date('Y') }}
-        @endif
+        <small>
+            <a href="/" class="text-muted">{{app_name()}}</a>.
+            @if(setting('show_copyright'))
+            @lang('Copyright') &copy; {{ date('Y') }}
+            @endif
+        </small>
     </div>
-    <div class="ms-auto">{!! setting('footer_text') !!}</div>
+    <div class="ms-auto"> <small>{!! setting('footer_text') !!}</small> </div>
 </footer>

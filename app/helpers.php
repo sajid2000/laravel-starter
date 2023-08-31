@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-
 /*
  * Global helpers file with misc functions.
  */
@@ -46,7 +43,6 @@ if (! function_exists('user_registration')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('label_case')) {
-
     /**
      * Prepare the Column Name for Lables.
      */
@@ -84,6 +80,10 @@ if (! function_exists('show_column_value')) {
         $column_type = $column->Type;
 
         $value = $valueObject->$column_name;
+
+        if (! $value) {
+            return $value;
+        }
 
         if ($return_format == 'raw') {
             return $value;
@@ -124,7 +124,6 @@ if (! function_exists('show_column_value')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('fielf_required')) {
-
     /**
      * Prepare the Column Name for Lables.
      */
@@ -190,7 +189,6 @@ if (! function_exists('humanFilesize')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('encode_id')) {
-
     /**
      * Prepare the Column Name for Lables.
      */
@@ -210,7 +208,6 @@ if (! function_exists('encode_id')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('decode_id')) {
-
     /**
      * Prepare the Column Name for Lables.
      */
@@ -235,7 +232,6 @@ if (! function_exists('decode_id')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('slug_format')) {
-
     /**
      * Format a string to Slug.
      */
@@ -248,7 +244,7 @@ if (! function_exists('slug_format')) {
         $string = str_replace('\\', '-', $string);
         $string = strtolower($string);
 
-        $slug_string = $string;
+        $slug_string = substr($string, 0, 190);
 
         return $slug_string;
     }
@@ -258,18 +254,17 @@ if (! function_exists('slug_format')) {
  *
  * icon
  * A short and easy way to show icon fornts
- * Default value will be check icon from FontAwesome
+ * Default value will be check icon from FontAwesome (https://fontawesome.com)
  *
  * ------------------------------------------------------------------------
  */
 if (! function_exists('icon')) {
-
     /**
      * Format a string to Slug.
      */
-    function icon($string = 'fas fa-check')
+    function icon($string = 'fa-regular fa-circle-check')
     {
-        $return_string = "<i class='".$string."'></i>";
+        $return_string = "<i class='".$string."'></i>&nbsp;";
 
         return $return_string;
     }
@@ -284,7 +279,6 @@ if (! function_exists('icon')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('logUserAccess')) {
-
     /**
      * Format a string to Slug.
      */
@@ -308,7 +302,6 @@ if (! function_exists('logUserAccess')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('bn2enNumber')) {
-
     /**
      * Prepare the Column Name for Lables.
      */
@@ -331,7 +324,6 @@ if (! function_exists('bn2enNumber')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('en2bnNumber')) {
-
     /**
      * Prepare the Column Name for Lables.
      */
@@ -354,7 +346,6 @@ if (! function_exists('en2bnNumber')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('en2bnDate')) {
-
     /**
      * Convert a English number to Bengali.
      */
@@ -448,7 +439,6 @@ if (! function_exists('banglaDate')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('generate_rgb_code')) {
-
     /**
      * Prepare the Column Name for Lables.
      */
@@ -473,7 +463,6 @@ if (! function_exists('generate_rgb_code')) {
  * ------------------------------------------------------------------------
  */
 if (! function_exists('date_today')) {
-
     /**
      * Return Date with weekday.
      *
@@ -487,5 +476,65 @@ if (! function_exists('date_today')) {
         $str = \Carbon\Carbon::now()->isoFormat('dddd, LL');
 
         return $str;
+    }
+}
+
+if (! function_exists('language_direction')) {
+    /**
+     * return direction of languages.
+     *
+     * @return string
+     */
+    function language_direction($language = null)
+    {
+        if (empty($language)) {
+            $language = app()->getLocale();
+        }
+        $language = strtolower(substr($language, 0, 2));
+        $rtlLanguages = [
+            'ar', //  'العربية', Arabic
+            'arc', //  'ܐܪܡܝܐ', Aramaic
+            'bcc', //  'بلوچی مکرانی', Southern Balochi
+            'bqi', //  'بختياري', Bakthiari
+            'ckb', //  'Soranî / کوردی', Sorani Kurdish
+            'dv', //  'ދިވެހިބަސް', Dhivehi
+            'fa', //  'فارسی', Persian
+            'glk', //  'گیلکی', Gilaki
+            'he', //  'עברית', Hebrew
+            'lrc', //- 'لوری', Northern Luri
+            'mzn', //  'مازِرونی', Mazanderani
+            'pnb', //  'پنجابی', Western Punjabi
+            'ps', //  'پښتو', Pashto
+            'sd', //  'سنڌي', Sindhi
+            'ug', //  'Uyghurche / ئۇيغۇرچە', Uyghur
+            'ur', //  'اردو', Urdu
+            'yi', //  'ייִדיש', Yiddish
+        ];
+        if (in_array($language, $rtlLanguages)) {
+            return 'rtl';
+        }
+
+        return 'ltr';
+    }
+}
+
+/*
+ * Application Demo Mode check
+ */
+if (! function_exists('demo_mode')) {
+    /**
+     * Helper to grab the application name.
+     *
+     * @return mixed
+     */
+    function demo_mode()
+    {
+        $return_string = false;
+
+        if (env('DEMO_MODE') == 'true') {
+            $return_string = true;
+        }
+
+        return $return_string;
     }
 }

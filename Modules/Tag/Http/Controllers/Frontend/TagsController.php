@@ -8,6 +8,16 @@ use Illuminate\Support\Str;
 
 class TagsController extends Controller
 {
+    public $module_title;
+
+    public $module_name;
+
+    public $module_path;
+
+    public $module_icon;
+
+    public $module_model;
+
     public function __construct()
     {
         // Page Title
@@ -23,7 +33,7 @@ class TagsController extends Controller
         $this->module_icon = 'fas fa-tags';
 
         // module model name, path
-        $this->module_model = "Modules\Tag\Entities\Tag";
+        $this->module_model = "Modules\Tag\Models\Tag";
     }
 
     /**

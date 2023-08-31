@@ -7,13 +7,22 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
 class BackendBaseController extends Controller
 {
     use Authorizable;
+
+    public $module_title;
+
+    public $module_name;
+
+    public $module_path;
+
+    public $module_icon;
+
+    public $module_model;
 
     public function __construct()
     {
@@ -87,7 +96,7 @@ class BackendBaseController extends Controller
 
         foreach ($query_data as $row) {
             $$module_name[] = [
-                'id'   => $row->id,
+                'id' => $row->id,
                 'text' => $row->name.' (Slug: '.$row->slug.')',
             ];
         }
@@ -109,31 +118,31 @@ class BackendBaseController extends Controller
         $page_heading = label_case($module_title);
         $title = $page_heading.' '.label_case($module_action);
 
-        $$module_name = $module_model::select('id', 'name', 'slug', 'updated_at');
+        $$module_name = $module_model::select('id', 'name', 'updated_at');
 
         $data = $$module_name;
 
         return Datatables::of($$module_name)
-                        ->addColumn('action', function ($data) {
-                            $module_name = $this->module_name;
+            ->addColumn('action', function ($data) {
+                $module_name = $this->module_name;
 
-                            return view('backend.includes.action_column', compact('module_name', 'data'));
-                        })
-                        ->editColumn('name', '<strong>{{$name}}</strong>')
-                        ->editColumn('updated_at', function ($data) {
-                            $module_name = $this->module_name;
+                return view('backend.includes.action_column', compact('module_name', 'data'));
+            })
+            ->editColumn('name', '<strong>{{$name}}</strong>')
+            ->editColumn('updated_at', function ($data) {
+                $module_name = $this->module_name;
 
-                            $diff = Carbon::now()->diffInHours($data->updated_at);
+                $diff = Carbon::now()->diffInHours($data->updated_at);
 
-                            if ($diff < 25) {
-                                return $data->updated_at->diffForHumans();
-                            } else {
-                                return $data->updated_at->isoFormat('llll');
-                            }
-                        })
-                        ->rawColumns(['name', 'action'])
-                        ->orderColumns(['id'], '-:column $1')
-                        ->make(true);
+                if ($diff < 25) {
+                    return $data->updated_at->diffForHumans();
+                } else {
+                    return $data->updated_at->isoFormat('llll');
+                }
+            })
+            ->rawColumns(['name', 'action'])
+            ->orderColumns(['id'], '-:column $1')
+            ->make(true);
     }
 
     /**
@@ -163,7 +172,6 @@ class BackendBaseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      * @return Response
      */
     public function store(Request $request)
@@ -179,7 +187,7 @@ class BackendBaseController extends Controller
 
         $$module_name_singular = $module_model::create($request->all());
 
-        flash("<i class='fas fa-check'></i> New '".Str::singular($module_title)."' Added")->success()->important();
+        flash(icon()."New '".Str::singular($module_title)."' Added")->success()->important();
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
@@ -243,7 +251,6 @@ class BackendBaseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
      * @param  int  $id
      * @return Response
      */
@@ -262,11 +269,11 @@ class BackendBaseController extends Controller
 
         $$module_name_singular->update($request->all());
 
-        flash("<i class='fas fa-check'></i> '".Str::singular($module_title)."' Updated Successfully")->success()->important();
+        flash(icon().' '.Str::singular($module_title)."' Updated Successfully")->success()->important();
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
-        return redirect()->back();
+        return redirect()->route("backend.$module_name.show", $$module_name_singular->id);
     }
 
     /**
@@ -290,7 +297,7 @@ class BackendBaseController extends Controller
 
         $$module_name_singular->delete();
 
-        flash('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Deleted Successfully!')->success()->important();
+        flash(icon().''.label_case($module_name_singular).' Deleted Successfully!')->success()->important();
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 
@@ -345,7 +352,7 @@ class BackendBaseController extends Controller
         $$module_name_singular = $module_model::withTrashed()->find($id);
         $$module_name_singular->restore();
 
-        flash('<i class="fas fa-check"></i> '.label_case($module_name_singular).' Data Restoreded Successfully!')->success()->important();
+        flash(icon().''.label_case($module_name_singular).' Data Restoreded Successfully!')->success()->important();
 
         logUserAccess($module_title.' '.$module_action.' | Id: '.$$module_name_singular->id);
 

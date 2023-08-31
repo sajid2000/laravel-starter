@@ -10,7 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="{{ setting('meta_description') }}">
     <meta name="keyword" content="{{ setting('meta_keyword') }}">
-
     @include('frontend.includes.meta')
 
     <!-- Shortcut Icon -->
@@ -20,9 +19,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @stack('before-styles')
-
-    <link rel="stylesheet" href="{{ mix('css/frontend.css') }}">
+    @vite(['resources/css/app-frontend.css'])
+    @vite(['resources/js/app-frontend.js'])
 
     @stack('after-styles')
 
@@ -33,7 +31,6 @@
 
     @include('frontend.includes.header')
 
-
     <main>
         @yield('content')
     </main>
@@ -43,10 +40,6 @@
 </body>
 
 <!-- Scripts -->
-@stack('before-scripts')
-
-<script src="{{ mix('js/frontend.js') }}"></script>
-
 @stack('after-scripts')
 
 </html>

@@ -6,9 +6,9 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Modules\Article\Entities\Category;
-use Modules\Article\Entities\Post;
-use Modules\Tag\Entities\Tag;
+use Modules\Article\Models\Post;
+use Modules\Category\Models\Category;
+use Modules\Tag\Models\Tag;
 
 class ArticleDatabaseSeeder extends Seeder
 {
@@ -43,9 +43,9 @@ class ArticleDatabaseSeeder extends Seeder
 
         // Populate the pivot table
         Post::factory()
-                ->has(Tag::factory()->count(rand(1, 5)))
-                ->count(25)
-                ->create();
+            ->has(Tag::factory()->count(rand(1, 5)))
+            ->count(25)
+            ->create();
         echo " Insert: posts \n\n";
 
         // Artisan::call('auth:permission', [
