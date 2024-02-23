@@ -2,11 +2,22 @@
 
 namespace Modules\Article\Providers;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Symfony\Component\Finder\Finder;
 
 class ArticleServiceProvider extends ServiceProvider
 {
+    /**
+     * @var string
+     */
+    protected $moduleName = 'Article';
+
+    /**
+     * @var string
+     */
+    protected $moduleNameLower = 'article';
+
     /**
      * Boot the application events.
      *
@@ -38,39 +49,21 @@ class ArticleServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register config.
-     *
-     * @return void
-     */
-    protected function registerConfig()
-    {
-        $this->publishes([
-            module_path('Article', 'Config/config.php') => config_path('article.php'),
-        ], 'config');
-        $this->mergeConfigFrom(
-            module_path('Article', 'Config/config.php'),
-            'article'
-        );
-    }
-
-    /**
      * Register views.
      *
      * @return void
      */
     public function registerViews()
     {
-        $viewPath = resource_path('views/modules/article');
+        $viewPath = resource_path('views/modules/'.$this->moduleNameLower);
 
-        $sourcePath = module_path('Article', 'Resources/views');
+        $sourcePath = module_path($this->moduleName, 'Resources/views');
 
         $this->publishes([
             $sourcePath => $viewPath,
-        ], 'views');
+        ], ['views', $this->moduleNameLower.'-module-views']);
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path.'/modules/article';
-        }, \Config::get('view.paths')), [$sourcePath]), 'article');
+        $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }
 
     /**
@@ -87,6 +80,32 @@ class ArticleServiceProvider extends ServiceProvider
         } else {
             $this->loadTranslationsFrom(module_path('Article', 'Resources/lang'), 'article');
         }
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [];
+    }
+
+    /**
+     * Register config.
+     *
+     * @return void
+     */
+    protected function registerConfig()
+    {
+        $this->publishes([
+            module_path('Article', 'Config/config.php') => config_path('article.php'),
+        ], 'config');
+        $this->mergeConfigFrom(
+            module_path('Article', 'Config/config.php'),
+            'article'
+        );
     }
 
     /**
@@ -108,13 +127,15 @@ class ArticleServiceProvider extends ServiceProvider
         $this->commands($classes);
     }
 
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
+    private function getPublishableViewPaths(): array
     {
-        return [];
+        $paths = [];
+        foreach (Config::get('view.paths') as $path) {
+            if (is_dir($path.'/modules/'.$this->moduleNameLower)) {
+                $paths[] = $path.'/modules/'.$this->moduleNameLower;
+            }
+        }
+
+        return $paths;
     }
 }

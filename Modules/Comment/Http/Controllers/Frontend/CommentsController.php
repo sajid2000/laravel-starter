@@ -52,11 +52,11 @@ class CommentsController extends Controller
 
         $module_action = 'List';
 
-        $$module_name = $module_model::latest()->published()->paginate();
+        $$module_name = $module_model::latest()->published()->with('commentable')->paginate();
 
         return view(
-            "comment::frontend.$module_name.index",
-            compact('module_title', 'module_name', "$module_name", 'module_icon', 'module_action', 'module_name_singular')
+            "comment::frontend.{$module_name}.index",
+            compact('module_title', 'module_name', "{$module_name}", 'module_icon', 'module_action', 'module_name_singular')
         );
     }
 
@@ -85,15 +85,14 @@ class CommentsController extends Controller
         }
 
         return view(
-            "comment::frontend.$module_name.show",
-            compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular', "$module_name_singular")
+            "comment::frontend.{$module_name}.show",
+            compact('module_title', 'module_name', 'module_icon', 'module_action', 'module_name_singular', "{$module_name_singular}")
         );
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
      * @return Response
      */
     public function store(Request $request)
@@ -114,8 +113,8 @@ class CommentsController extends Controller
         $data = [
             'name' => $request->name,
             'comment' => $request->comment,
-            'user_id' => (isset($request->user_id)) ? decode_id($request->user_id) : null,
-            'parent_id' => (isset($request->parent_id)) ? decode_id($request->parent_id) : null,
+            'user_id' => isset($request->user_id) ? decode_id($request->user_id) : null,
+            'parent_id' => isset($request->parent_id) ? decode_id($request->parent_id) : null,
         ];
 
         if (isset($request->post_id)) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Modules\Article\Models\Post;
@@ -13,7 +13,7 @@ class RecentPosts extends Component
     {
         $limit = $this->limit;
 
-        $limit = ($limit > 0) ? $limit : 5;
+        $limit = $limit > 0 ? $limit : 5;
 
         $recentPosts = Post::recentlyPublished()->take($limit)->get();
 
