@@ -103,7 +103,7 @@ class BackupController extends Controller
         $module_name_singular = Str::singular($module_name);
 
         if (demo_mode()) {
-            flash(icon().'Backup Creation Skillped on Demo Mode!')->warning()->important();
+            flash('Backup Creation Skillped on Demo Mode!')->warning()->important();
 
             return redirect()->route("backend.{$module_path}.index");
         }
@@ -117,7 +117,7 @@ class BackupController extends Controller
             Log::info("Backpack\BackupManager -- new backup started from admin interface \r\n".$output);
 
             // return the results as a response to the ajax call
-            flash(icon().'New backup created')->success()->important();
+            flash('New backup created')->success()->important();
 
             return redirect()->back();
         } catch (Exception $e) {
@@ -154,7 +154,7 @@ class BackupController extends Controller
         if ($disk->exists($file)) {
             $disk->delete($file);
 
-            flash(icon()."`{$file_name}` deleted successfully.")->success()->important();
+            flash("`{$file_name}` deleted successfully.")->success()->important();
 
             return redirect()->back();
         }

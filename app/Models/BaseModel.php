@@ -19,19 +19,20 @@ class BaseModel extends Model implements HasMedia
     protected $guarded = [
         'id',
         'updated_at',
-        '_token',
-        '_method',
     ];
 
-    protected $casts = [
-        'deleted_at' => 'datetime',
-        'published_at' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'deleted_at' => 'datetime',
+            'published_at' => 'datetime',
+        ];
+    }
 
     /**
      * Create Converted copies of uploaded images.
      */
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
             ->width(250)
@@ -53,7 +54,34 @@ class BaseModel extends Model implements HasMedia
     {
         $table_name = DB::getTablePrefix().$this->getTable();
 
-        return DB::select('SHOW COLUMNS FROM '.$table_name);
+        switch (config('database.default')) {
+            case 'sqlite':
+                $columns = DB::select("PRAGMA table_info({$table_name});");
+                break;
+            case 'mysql':
+            case 'mariadb':
+                $columns = DB::select('SHOW COLUMNS FROM '.$table_name);
+                $columns = array_map(function ($column) {
+                    return [
+                        'name' => $column->Field,
+                        'type' => $column->Type,
+                        'notnull' => $column->Null,
+                        'key' => $column->Key,
+                        'default' => $column->Default,
+                        'extra' => $column->Extra,
+                    ];
+                }, $columns);
+                break;
+            case 'pgsql':
+                $columns = DB::select("SELECT column_name as `Field`, data_type as `Type` FROM information_schema.columns WHERE table_name = '{$table_name}';");
+                break;
+
+            default:
+                // code...
+                break;
+        }
+
+        return json_decode(json_encode($columns));
     }
 
     /**
@@ -85,7 +113,7 @@ class BaseModel extends Model implements HasMedia
     }
 
     /**
-     * Get Status Label.
+     * Get Status Label as text.
      */
     public function getStatusLabelTextAttribute()
     {
@@ -134,6 +162,11 @@ class BaseModel extends Model implements HasMedia
         }
     }
 
+    /**
+     * Boot the model and attach event listeners.
+     *
+     * @return void
+     */
     protected static function boot()
     {
         parent::boot();
@@ -159,5 +192,39 @@ class BaseModel extends Model implements HasMedia
             $table->deleted_by = Auth::id();
             $table->save();
         });
+    }
+
+    /**
+     * Set the 'meta title'.
+     * If no value submitted use the 'Title'.
+     *
+     * @param [type]
+     */
+    public function setMetaTitleAttribute($value)
+    {
+        $this->attributes['meta_title'] = $value;
+
+        if (empty($value)) {
+            $this->attributes['meta_title'] = $this->attributes['name'];
+        }
+    }
+
+    /**
+     * Set the meta meta_og_image
+     * If no value submitted use the 'Title'.
+     *
+     * @param [type]
+     */
+    public function setMetaOgImageAttribute($value)
+    {
+        $this->attributes['meta_og_image'] = $value;
+
+        if (empty($value)) {
+            if (isset($this->attributes['image'])) {
+                $this->attributes['meta_og_image'] = $this->attributes['image'];
+            } else {
+                $this->attributes['meta_og_image'] = setting('meta_image');
+            }
+        }
     }
 }
