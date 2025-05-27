@@ -152,7 +152,7 @@ if (! function_exists('field_required')) {
         $return_text = '';
 
         if ($required !== '') {
-            $return_text = '&nbsp;<span class="text-danger">*</span>';
+            $return_text = '&nbsp;<span class="text-danger text-red-500">*</span>';
         }
 
         return $return_text;
@@ -166,7 +166,7 @@ if (! function_exists('setting')) {
     function setting($key, $default = null)
     {
         if (is_null($key)) {
-            return new App\Models\Setting();
+            return new App\Models\Setting;
         }
 
         if (is_array($key)) {
@@ -502,7 +502,7 @@ if (! function_exists('language_direction')) {
             'fa', //  'فارسی', Persian
             'glk', //  'گیلکی', Gilaki
             'he', //  'עברית', Hebrew
-            'lrc', //- 'لوری', Northern Luri
+            'lrc', // - 'لوری', Northern Luri
             'mzn', //  'مازِرونی', Mazanderani
             'pnb', //  'پنجابی', Western Punjabi
             'ps', //  'پښتو', Pashto
